@@ -4,6 +4,8 @@ import requests
 from zipfile import ZipFile
 from pathlib import Path
 from urllib.parse import urljoin
+import importlib.resources as pkg_resources
+from . import static  # Relative import of the static package
 
 DOWNLOAD_ENDPOINT = "https://powerdb.s3.us-west-2.amazonaws.com/download_endpoint/"
 LOCAL_BIBLE_DIR = Path.home() / 'grepbible_data'
@@ -98,14 +100,14 @@ def ensure_bible_version_exists(version):
         #print(f"{version} already exists locally.")
     
 def list_bibles():
-    acronym_file = "static/acronyms.txt"  # Update this path
-    full_name_file = "static/full_names.txt"  # Update this path
-    
-    # Read acronyms and full names into lists
-    with open(acronym_file, 'r') as af:
-        acronyms = af.read().splitlines()
-    with open(full_name_file, 'r') as fnf:
-        full_names = fnf.read().splitlines()
+    with pkg_resources.path(static, 'acronyms.txt') as acronym_path, \
+         pkg_resources.path(static, 'full_names.txt') as full_name_path:
+        
+        # Read acronyms and full names into lists
+        with open(acronym_path, 'r') as af:
+            acronyms = af.read().splitlines()
+        with open(full_name_path, 'r') as fnf:
+            full_names = fnf.read().splitlines()
     
     # Create a mapping of acronyms to full names
     bible_versions = dict(zip(acronyms, full_names))
