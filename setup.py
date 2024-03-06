@@ -20,6 +20,7 @@ setup(
     install_requires=[
         'requests',  # List other dependencies as needed
     ],
+    include_package_data=True,
     keywords=['bible', 'KJV'],
     classifiers=[
         'Development Status :: 3 - Alpha',
