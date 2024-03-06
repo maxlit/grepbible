@@ -1,5 +1,5 @@
 import argparse
-from grep_bible.bible_manager import get_verse, list_bibles
+from grepbible.bible_manager import get_verse, list_bibles
 
 def main():
     parser = argparse.ArgumentParser(description="CLI tool to look up Bible verses.")

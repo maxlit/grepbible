@@ -1,4 +1,4 @@
-# grep-bible
+# grepbible
 
 `grepbible` is a command-line interface (CLI) tool designed to make searching for Bible verses locally fast and intuitive. Whether you're looking for a specific passage, comparing verses across different translations, or exploring ranges of chapters and verses, `grepbible` streamlines the process by bringing the power of Bible study directly to your terminal.
 
@@ -20,11 +20,11 @@ To install `grepbible`, ensure you have Python 3.6 or higher installed on your s
 pip install grepbible
 ```
 
-This command installs the `grep-bible` package and makes the `gbib` command available in your shell.
+This command installs the `grepbible` package and makes the `gbib` command available in your shell.
 
 ## Usage
 
-`grep-bible` is designed to be straightforward and easy to use from the command line. Below are some common usage examples:
+`grepbible` is designed to be straightforward and easy to use from the command line. Below are some common usage examples:
 
 ### Look Up a Single Verse
 
@@ -57,7 +57,7 @@ gbib --help
 
 ## Contributing
 
-Contributions to `grep-bible` are welcome! Whether it's adding new features, improving existing functionality, or reporting issues, your input is valuable. To contribute:
+Contributions to `grepbible` are welcome! Whether it's adding new features, improving existing functionality, or reporting issues, your input is valuable. To contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature or fix.
