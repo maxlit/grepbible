@@ -100,6 +100,7 @@ def ensure_bible_version_exists(version):
         #print(f"{version} already exists locally.")
     
 def list_bibles():
+    ensure_data_dir_exists()
     with pkg_resources.path(static, 'acronyms.txt') as acronym_path, \
          pkg_resources.path(static, 'full_names.txt') as full_name_path:
         
