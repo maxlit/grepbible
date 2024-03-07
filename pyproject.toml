@@ -2,13 +2,14 @@
 name = "grepbible"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Maxim Litvak <maxim@litvak.eu>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
 requests = "^2.31.0"
+pytest = "^8.0.2"
 
 
 [build-system]

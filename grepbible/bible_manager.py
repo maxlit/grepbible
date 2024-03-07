@@ -97,17 +97,30 @@ def ensure_bible_version_exists(version):
     else:
         pass
         #print(f"{version} already exists locally.")
-    
+
+def get_available_versions():
+    # Use the 'files' function to get a path-like object for 'acronyms.txt'
+    resource_path = pkg_resources.files('grepbible.static').joinpath('acronyms.txt')
+    with resource_path.open('r') as af:
+        acronyms = af.read().splitlines()
+    return acronyms
+
+def is_valid_version(supplied_version):
+    available_versions = get_available_versions()
+    return supplied_version in available_versions
+
+
 def list_bibles():
     ensure_data_dir_exists()
-    with pkg_resources.path(static, 'acronyms.txt') as acronym_path, \
-         pkg_resources.path(static, 'full_names.txt') as full_name_path:
-        
-        # Read acronyms and full names into lists
-        with open(acronym_path, 'r') as af:
-            acronyms = af.read().splitlines()
-        with open(full_name_path, 'r') as fnf:
-            full_names = fnf.read().splitlines()
+    # Adjust to use 'files()' for accessing resource files
+    acronyms_path = pkg_resources.files('grepbible.static').joinpath('acronyms.txt')
+    full_names_path = pkg_resources.files('grepbible.static').joinpath('full_names.txt')
+    
+    # Read acronyms and full names into lists
+    with acronyms_path.open('r') as af:
+        acronyms = af.read().splitlines()
+    with full_names_path.open('r') as fnf:
+        full_names = fnf.read().splitlines()
     
     # Create a mapping of acronyms to full names
     bible_versions = dict(zip(acronyms, full_names))
@@ -119,7 +132,12 @@ def list_bibles():
         local_indicator = "[local]" if acronym in local_bibles else ""
         print(f"{acronym} - {full_name} {local_indicator}")
 
+
 def download_and_extract_bible(version):
+    if not is_valid_version(version):
+        print(f"Invalid version: {version}")
+        print("Use the -l flag to list available versions.")
+        return
     zip_url = urljoin(DOWNLOAD_ENDPOINT, f"{version}.zip")
     print(f"Downloading {version} from {zip_url}...")
     zip_path = LOCAL_BIBLE_DIR / f"{version}.zip"
@@ -144,18 +162,24 @@ def download_and_extract_bible(version):
         os.remove(zip_path)  # Attempt to clean up corrupt zip file
 
 def parse_citation(citation):
-    # This is a simplified pattern and might need adjustments
-    pattern = r'(\d?\s?[a-zA-Z]+\.?)\s+(\d+)(?:[:–](\d+))?[:](\d+)(?:–(\d+))?(?:,(\d+))?'
-    match = re.match(pattern, citation.replace(" ", ""))
+    # Pattern to match "BookName Chapter:Verse", "BookName Chapter:Verse-Verse", and "BookName Chapter:Verse,Verse"
+    # Accepts a colon as the separator between the chapter and verses, and commas for multiple verses
+    pattern = r'([1-3]?\s?[a-zA-Z]+\.?)\s+(\d+):\s*((?:\d+(?:-\d+)?\s*,?\s*)+)'
+    match = re.match(pattern, citation)
     if not match:
         print(f"Could not parse the citation: {citation}")
         return None
+
+    book_abbr, chapter, verses = match.groups()
     
-    book, start_chapter, end_chapter, start_verse, end_verse, extra_verse = match.groups()
-    # Normalize book name
-    book = book.replace('.', '')  # Remove period from abbreviations if present
-    book = BOOK_ABBREVIATIONS.get(book, book)  # Translate abbreviation to full name if possible
-    return book, start_chapter, end_chapter, start_verse, end_verse, extra_verse
+    # Normalize the book abbreviation by removing any trailing dot and mapping to full name
+    book_abbr_normalized = book_abbr.rstrip('.')
+    book = BOOK_ABBREVIATIONS.get(book_abbr_normalized, book_abbr_normalized)
+    
+    # Split the verses part into individual verses or verse ranges
+    verse_parts = [v.strip() for v in verses.split(',') if v]
+
+    return book, chapter, verse_parts
 
 def get_verse(version, citation):
     ensure_bible_version_exists(version)
@@ -163,23 +187,22 @@ def get_verse(version, citation):
     if not parsed:
         return
     
-    book, start_chapter, end_chapter, start_verse, end_verse, extra_verse = parsed
-    chapters = range(int(start_chapter), int(end_chapter) + 1) if end_chapter else [int(start_chapter)]
-    verses_to_fetch = [int(start_verse)]
-    if end_verse:
-        verses_to_fetch.extend(range(int(start_verse) + 1, int(end_verse) + 1))
-    if extra_verse:
-        verses_to_fetch.append(int(extra_verse))
+    book, chapter, verse_parts = parsed  # Adjusted to match new parse_citation output
     
-    for chapter in chapters:
+    for part in verse_parts:
+        if '-' in part:  # If the part is a verse range
+            start_verse, end_verse = map(int, part.split('-'))
+            verses_to_fetch = range(start_verse, end_verse + 1)
+        else:  # If the part is an individual verse
+            verses_to_fetch = [int(part)]
+        
         chapter_file = LOCAL_BIBLE_DIR / version / f"{book}_{chapter}.txt"
         try:
             with open(chapter_file, 'r', encoding='utf-8') as f:
                 chapter_verses = f.readlines()
                 for verse_num in verses_to_fetch:
-                    # Adjust for zero-based indexing
-                    print(chapter_verses[verse_num - 1].strip())
+                    print(chapter_verses[verse_num - 1].strip())  # Adjusted for zero-based indexing
         except FileNotFoundError:
             print(f"File not found: {chapter_file}")
         except IndexError:
-            print(f"Verse number out of range in {book} chapter {chapter}")
+            print(f"Verse number out of range in {book} chapter {chapter}, verse {verse_num}")
