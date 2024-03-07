@@ -8,9 +8,9 @@ bg
 my
 ceb
 big5
-big5
+big5_cath
 gb
-gb
+gb_cat
 pn
 cr
 cz
