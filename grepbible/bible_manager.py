@@ -196,7 +196,7 @@ def get_verse(version, citation):
         else:  # If the part is an individual verse
             verses_to_fetch = [int(part)]
         
-        chapter_file = LOCAL_BIBLE_DIR / version / f"{book}_{chapter}.txt"
+        chapter_file = LOCAL_BIBLE_DIR / version / f"{book}/{chapter}.txt"
         try:
             with open(chapter_file, 'r', encoding='utf-8') as f:
                 chapter_verses = f.readlines()
