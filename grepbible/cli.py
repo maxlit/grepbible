@@ -1,5 +1,5 @@
 import argparse
-from grepbible.bible_manager import get_verse, list_bibles, download_and_extract_bible
+from grepbible.bible_manager import *
 
 def main():
     parser = argparse.ArgumentParser(description="CLI tool to look up Bible verses.")
@@ -20,6 +20,8 @@ def main():
     elif args.download:
         for version in args.download.split(','):
             download_and_extract_bible(version)
+    elif args.books:
+        list_books()
     else:
         parser.print_help()
 
