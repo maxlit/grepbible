@@ -181,30 +181,51 @@ def parse_citation(citation):
 
     return book, chapter, verse_parts
 
-def get_verse(versions, citation):
+def get_verse(versions, citation, interleave=False):
     version_list = [version.strip() for version in versions.split(',')]
-    for version in version_list:
-        ensure_bible_version_exists(version)
-        parsed = parse_citation(citation)
-        if not parsed:
-            return
+    parsed = parse_citation(citation)
+    if not parsed:
+        return
+    
+    book, chapter, verse_parts = parsed  # Adjusted to match new parse_citation output
+    
+    # Prepare a data structure to hold verses from all versions for each verse part
+    verses_by_version = {version: [] for version in version_list}
+    
+    for part in verse_parts:
+        if '-' in part:  # If the part is a verse range
+            start_verse, end_verse = map(int, part.split('-'))
+            verses_to_fetch = range(start_verse, end_verse + 1)
+        else:  # If the part is an individual verse
+            verses_to_fetch = [int(part)]
         
-        book, chapter, verse_parts = parsed  # Adjusted to match new parse_citation output
-        
-        for part in verse_parts:
-            if '-' in part:  # If the part is a verse range
-                start_verse, end_verse = map(int, part.split('-'))
-                verses_to_fetch = range(start_verse, end_verse + 1)
-            else:  # If the part is an individual verse
-                verses_to_fetch = [int(part)]
-            
+        for version in version_list:
+            ensure_bible_version_exists(version)
             chapter_file = LOCAL_BIBLE_DIR / version / f"{book}/{chapter}.txt"
             try:
                 with open(chapter_file, 'r', encoding='utf-8') as f:
                     chapter_verses = f.readlines()
                     for verse_num in verses_to_fetch:
-                        print(chapter_verses[verse_num - 1].strip())  # Adjusted for zero-based indexing
+                        verse_line = chapter_verses[verse_num - 1].strip()
+                        verses_by_version[version].append(verse_line)
             except FileNotFoundError:
                 print(f"File not found: {chapter_file}")
+                return
             except IndexError:
                 print(f"Verse number out of range in {book} chapter {chapter}, verse {verse_num}")
+                return
+    
+    # Interleave and print verses if interleave flag is True
+    if interleave:
+        for verse_num in verses_to_fetch:
+            for version in version_list:
+                try:
+                    print(f"{version}: {verses_by_version[version][verse_num - verses_to_fetch.start]}")
+                except IndexError:
+                    print(f"Verse {verse_num} missing in version {version}")
+            print()  # Print a newline for separation between verses
+    else:
+        for version in version_list:
+            for verse_line in verses_by_version[version]:
+                print(verse_line)
+
