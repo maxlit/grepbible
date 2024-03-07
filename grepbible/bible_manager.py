@@ -79,6 +79,12 @@ BOOK_ABBREVIATIONS = {
     'Rev': 'Revelation',
 }
 
+class TextColor:
+    DARK_GREEN = '\033[32m'  # Dark Green ANSI escape code
+    ORANGE = '\033[33m'  # Orange ANSI escape code
+    RESET = '\033[0m'  # Reset to default terminal color
+
+
 def ensure_data_dir_exists():
     try:
         LOCAL_BIBLE_DIR.mkdir(parents=True, exist_ok=True)
@@ -217,13 +223,20 @@ def get_verse(versions, citation, interleave=False):
     
     # Interleave and print verses if interleave flag is True
     if interleave:
-        for verse_num in verses_to_fetch:
-            for version in version_list:
+        for verse_num in range(max(len(verses) for verses in verses_by_version.values())):
+            for i, version in enumerate(version_list):
                 try:
-                    print(f"{version}: {verses_by_version[version][verse_num - verses_to_fetch.start]}")
+                    verse_line = verses_by_version[version][verse_num]
+                    if i == 1:  # Apply color only to the second version
+                        print(f"{TextColor.DARK_GREEN}{verse_line}{TextColor.RESET}")
+                    elif i == 2:
+                        print(f"{TextColor.ORANGE}{verse_line}{TextColor.RESET}")
+                    else:
+                        print(f"{verse_line}")
                 except IndexError:
-                    print(f"Verse {verse_num} missing in version {version}")
-            print()  # Print a newline for separation between verses
+                    # Handle cases where one version has fewer verses
+                    pass
+            print()  # Newline for separation between verses
     else:
         for version in version_list:
             for verse_line in verses_by_version[version]:
