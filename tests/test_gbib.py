@@ -15,23 +15,34 @@ class TestGB(unittest.TestCase):
             self.assertEqual(book, 'Genesis')
             self.assertEqual(chapter, '1')
             self.assertEqual(verse_parts[0], '1')
+
     def test_parse_citation_range(self):  
         book, chapter, verse_parts = parse_citation("Genesis 1:1-10")
         self.assertEqual(book, 'Genesis')
         self.assertEqual(chapter, '1')
         self.assertEqual(verse_parts[0], '1-10')
+
     def test_parse_citation_disjoint(self):  
         book, chapter, verse_parts = parse_citation("Genesis 1:1,10")
         self.assertEqual(book, 'Genesis')
         self.assertEqual(chapter, '1')
         self.assertEqual(verse_parts[1], '10')
+
+    def test_parse_chapter(self):
+        book, chapter, verse_parts = parse_citation("Psalms 23")
+        self.assertEqual(book, 'Psalms')
+        self.assertEqual(chapter, '23')
+        self.assertEqual(verse_parts, None)
+
     def test_get_available_versions(self):
         accros = get_available_versions()
         self.assertTrue('kj' in accros)
         self.assertFalse('xyz' in accros)
+
     def test_is_valid_version(self):
         self.assertTrue(is_valid_version('bg'))
         self.assertFalse(is_valid_version('xyz'))
+
 
 def main():
     unittest.main()

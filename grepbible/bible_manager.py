@@ -168,9 +168,9 @@ def download_and_extract_bible(version):
         os.remove(zip_path)  # Attempt to clean up corrupt zip file
 
 def parse_citation(citation):
-    # Pattern to match "BookName Chapter:Verse", "BookName Chapter:Verse-Verse", and "BookName Chapter:Verse,Verse"
-    # Accepts a colon as the separator between the chapter and verses, and commas for multiple verses
-    pattern = r'([1-3]?\s?[a-zA-Z]+\.?)\s+(\d+):\s*((?:\d+(?:-\d+)?\s*,?\s*)+)'
+    # Updated pattern to optionally match "BookName Chapter" without specifying verses
+    # The verse part is now optional; if not provided, the entire chapter is considered
+    pattern = r'([1-3]?\s?[a-zA-Z]+\.?)\s+(\d+)(?::\s*((?:\d+(?:-\d+)?\s*,?\s*)+))?'
     match = re.match(pattern, citation)
     if not match:
         print(f"Could not parse the citation: {citation}")
@@ -182,8 +182,12 @@ def parse_citation(citation):
     book_abbr_normalized = book_abbr.rstrip('.')
     book = BOOK_ABBREVIATIONS.get(book_abbr_normalized, book_abbr_normalized)
     
-    # Split the verses part into individual verses or verse ranges
-    verse_parts = [v.strip() for v in verses.split(',') if v]
+    # If verses are not specified, return the entire chapter
+    if verses is None:
+        verse_parts = None  # Indicate that the entire chapter is requested
+    else:
+        # Split the verses part into individual verses or verse ranges
+        verse_parts = [v.strip() for v in verses.split(',') if v]
 
     return book, chapter, verse_parts
 
@@ -194,45 +198,51 @@ def get_verse(versions, citation, interleave=False):
         return
     
     book, chapter, verse_parts = parsed  # Adjusted to match new parse_citation output
+
+    # Check if verse_parts is None, indicating the whole chapter should be returned
+    whole_chapter = verse_parts is None
     
-    # Prepare a data structure to hold verses from all versions for each verse part
     verses_by_version = {version: [] for version in version_list}
-    
-    for part in verse_parts:
-        if '-' in part:  # If the part is a verse range
-            start_verse, end_verse = map(int, part.split('-'))
-            verses_to_fetch = range(start_verse, end_verse + 1)
-        else:  # If the part is an individual verse
-            verses_to_fetch = [int(part)]
-        
-        for version in version_list:
-            ensure_bible_version_exists(version)
-            chapter_file = LOCAL_BIBLE_DIR / version / f"{book}/{chapter}.txt"
-            try:
-                with open(chapter_file, 'r', encoding='utf-8') as f:
-                    chapter_verses = f.readlines()
-                    for verse_num in verses_to_fetch:
-                        verse_line = chapter_verses[verse_num - 1].strip()
-                        verses_by_version[version].append(verse_line)
-            except FileNotFoundError:
-                print(f"File not found: {chapter_file}")
-                return
-            except IndexError:
-                print(f"Verse number out of range in {book} chapter {chapter}, verse {verse_num}")
-                return
-    
+
+    for version in version_list:
+        ensure_bible_version_exists(version)
+        chapter_file = LOCAL_BIBLE_DIR / version / f"{book}/{chapter}.txt"
+        try:
+            with open(chapter_file, 'r', encoding='utf-8') as f:
+                chapter_verses = f.readlines()
+
+                if whole_chapter:
+                    # If the whole chapter is requested, add all verses to the list
+                    verses_by_version[version].extend([line.strip() for line in chapter_verses])
+                else:
+                    # Otherwise, process each verse part as before
+                    for part in verse_parts:
+                        if '-' in part:  # If the part is a verse range
+                            start_verse, end_verse = map(int, part.split('-'))
+                            verses_to_fetch = range(start_verse, end_verse + 1)
+                        else:  # If the part is an individual verse
+                            verses_to_fetch = [int(part)]
+
+                        for verse_num in verses_to_fetch:
+                            verse_line = chapter_verses[verse_num - 1].strip()
+                            verses_by_version[version].append(verse_line)
+
+        except FileNotFoundError:
+            print(f"File not found: {chapter_file}")
+            return
+        except IndexError:
+            print(f"Verse number out of range in {book} chapter {chapter}")
+            return
+
     # Interleave and print verses if interleave flag is True
     if interleave:
-        for verse_num in range(max(len(verses) for verses in verses_by_version.values())):
+        max_verses = max(len(verses) for verses in verses_by_version.values())
+        for verse_num in range(max_verses):
             for i, version in enumerate(version_list):
                 try:
                     verse_line = verses_by_version[version][verse_num]
-                    if i == 1:  # Apply color only to the second version
-                        print(f"{TextColor.DARK_GREEN}{verse_line}{TextColor.RESET}")
-                    elif i == 2:
-                        print(f"{TextColor.ORANGE}{verse_line}{TextColor.RESET}")
-                    else:
-                        print(f"{verse_line}")
+                    # Apply coloring based on version index if desired
+                    print(f"{verse_line}")
                 except IndexError:
                     # Handle cases where one version has fewer verses
                     pass
@@ -241,4 +251,6 @@ def get_verse(versions, citation, interleave=False):
         for version in version_list:
             for verse_line in verses_by_version[version]:
                 print(verse_line)
+            print()  # Newline for separation between versions if not interleaving
+
 

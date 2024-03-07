@@ -58,7 +58,12 @@ gbib -c "Psalms 23"
 ### Show a Range of Verses
 
 ```sh
-gbib -c "Genesis 1:1–3"
+gbib -c "Gen 41:29-30"
+```
+
+```sh
+Behold, there come seven years of great plenty throughout all the land of Egypt:
+And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
 ```
 
 ### Fetch Multiple Disjoint Verses
@@ -67,11 +72,32 @@ gbib -c "Genesis 1:1–3"
 gbib -c "Genesis 1:1–3"
 ```
 
-### Fetch Multiple Disjoint Verses
+### Compare different versions
 
-Show interleave translation of Latin Vulgata to English KJV (line-by-line)
+Show interleave translation of Latin Vulgata to English KJV (line-by-line):
 ```sh
-gbib -c "Genesis 1:1–3" -v vg,kj -i
+gbib -c 'Gen 41:29-30' -v kj,vg -i
+```
+
+```sh
+Behold, there come seven years of great plenty throughout all the land of Egypt:
+ecce septem anni venient fertilitatis magnae in universa terra Aegypti
+
+And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
+quos sequentur septem anni alii tantae sterilitatis ut oblivioni tradatur cuncta retro abundantia consumptura est enim fames omnem terram
+````
+
+Block-by block translation (omit the flag `-i`):
+
+```sh
+ gbib -c 'Gen 41:29-30' -v kj,vg 
+```
+
+```sh
+Behold, there come seven years of great plenty throughout all the land of Egypt:
+And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
+ecce septem anni venient fertilitatis magnae in universa terra Aegypti
+quos sequentur septem anni alii tantae sterilitatis ut oblivioni tradatur cuncta retro abundantia consumptura est enim fames omnem terram
 ```
 
 For more information on command options and additional features, you can run:
