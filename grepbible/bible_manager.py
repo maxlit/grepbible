@@ -206,7 +206,7 @@ def get_verse(versions, citation, interleave=False):
 
     for version in version_list:
         ensure_bible_version_exists(version)
-        chapter_file = LOCAL_BIBLE_DIR / version / f"{book}/{chapter}.txt"
+        chapter_file = LOCAL_BIBLE_DIR / version / f"{book}_{chapter}.txt"
         try:
             with open(chapter_file, 'r', encoding='utf-8') as f:
                 chapter_verses = f.readlines()
@@ -234,23 +234,30 @@ def get_verse(versions, citation, interleave=False):
             print(f"Verse number out of range in {book} chapter {chapter}")
             return
 
-    # Interleave and print verses if interleave flag is True
+    # Interleave and print verses with color coding if interleave flag is True
     if interleave:
         max_verses = max(len(verses) for verses in verses_by_version.values())
         for verse_num in range(max_verses):
             for i, version in enumerate(version_list):
                 try:
                     verse_line = verses_by_version[version][verse_num]
-                    # Apply coloring based on version index if desired
-                    print(f"{verse_line}")
+                    if i == 1:  # Apply dark green color only to the second version
+                        print(f"{TextColor.DARK_GREEN}{verse_line}{TextColor.RESET}")
+                    elif i == 2:  # Apply orage color only to the third version
+                        print(f"{TextColor.ORANGE}{verse_line}{TextColor.RESET}")
+                    else:
+                        print(f"{verse_line}")
                 except IndexError:
                     # Handle cases where one version has fewer verses
                     pass
             print()  # Newline for separation between verses
     else:
-        for version in version_list:
+        for i, version in enumerate(version_list):
             for verse_line in verses_by_version[version]:
-                print(verse_line)
+                if i == 1:
+                    print(f"{TextColor.DARK_GREEN}{verse_line}{TextColor.RESET}")
+                elif i == 2:
+                    print(f"{TextColor.ORANGE}{verse_line}{TextColor.RESET}")
+                else:
+                    print(f"{verse_line}")
             print()  # Newline for separation between versions if not interleaving
-
-
