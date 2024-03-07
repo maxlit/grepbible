@@ -181,28 +181,30 @@ def parse_citation(citation):
 
     return book, chapter, verse_parts
 
-def get_verse(version, citation):
-    ensure_bible_version_exists(version)
-    parsed = parse_citation(citation)
-    if not parsed:
-        return
-    
-    book, chapter, verse_parts = parsed  # Adjusted to match new parse_citation output
-    
-    for part in verse_parts:
-        if '-' in part:  # If the part is a verse range
-            start_verse, end_verse = map(int, part.split('-'))
-            verses_to_fetch = range(start_verse, end_verse + 1)
-        else:  # If the part is an individual verse
-            verses_to_fetch = [int(part)]
+def get_verse(versions, citation):
+    version_list = [version.strip() for version in versions.split(',')]
+    for version in version_list:
+        ensure_bible_version_exists(version)
+        parsed = parse_citation(citation)
+        if not parsed:
+            return
         
-        chapter_file = LOCAL_BIBLE_DIR / version / f"{book}/{chapter}.txt"
-        try:
-            with open(chapter_file, 'r', encoding='utf-8') as f:
-                chapter_verses = f.readlines()
-                for verse_num in verses_to_fetch:
-                    print(chapter_verses[verse_num - 1].strip())  # Adjusted for zero-based indexing
-        except FileNotFoundError:
-            print(f"File not found: {chapter_file}")
-        except IndexError:
-            print(f"Verse number out of range in {book} chapter {chapter}, verse {verse_num}")
+        book, chapter, verse_parts = parsed  # Adjusted to match new parse_citation output
+        
+        for part in verse_parts:
+            if '-' in part:  # If the part is a verse range
+                start_verse, end_verse = map(int, part.split('-'))
+                verses_to_fetch = range(start_verse, end_verse + 1)
+            else:  # If the part is an individual verse
+                verses_to_fetch = [int(part)]
+            
+            chapter_file = LOCAL_BIBLE_DIR / version / f"{book}/{chapter}.txt"
+            try:
+                with open(chapter_file, 'r', encoding='utf-8') as f:
+                    chapter_verses = f.readlines()
+                    for verse_num in verses_to_fetch:
+                        print(chapter_verses[verse_num - 1].strip())  # Adjusted for zero-based indexing
+            except FileNotFoundError:
+                print(f"File not found: {chapter_file}")
+            except IndexError:
+                print(f"Verse number out of range in {book} chapter {chapter}, verse {verse_num}")
