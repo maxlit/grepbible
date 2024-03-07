@@ -7,6 +7,7 @@ def main():
     parser.add_argument('-v', '--version', help="Bible version(s), separated by commas.", required=False, default="kj")
     parser.add_argument('-d', '--download', help="Download Bible version(s), separated by commas.", required=False)
     parser.add_argument('-l', '--list', action='store_true', help="List all available Bibles.")
+    parser.add_argument('-b', '--books', action='store_true', help="List all available books (KJV names used).")
     parser.add_argument('-i', '--interleave', action='store_true', help="Interleave verses for multiple versions.")
 
     args = parser.parse_args()

@@ -103,6 +103,13 @@ def ensure_bible_version_exists(version):
     else:
         pass
         #print(f"{version} already exists locally.")
+    
+def ensure_book_exists(book):
+    if book not in BOOK_ABBREVIATIONS.values():
+        print(f"Invalid book: {book}")
+        print("Use the -l flag to list available books.")
+        return False
+    return True
 
 def get_available_versions():
     # Use the 'files' function to get a path-like object for 'acronyms.txt'
@@ -137,6 +144,10 @@ def list_bibles():
     for acronym, full_name in bible_versions.items():
         local_indicator = "[local]" if acronym in local_bibles else ""
         print(f"{acronym} - {full_name} {local_indicator}")
+
+def list_books():
+    for book in BOOK_ABBREVIATIONS.values():
+        print(book)
 
 
 def download_and_extract_bible(version):
@@ -198,6 +209,9 @@ def get_verse(versions, citation, interleave=False):
         return
     
     book, chapter, verse_parts = parsed  # Adjusted to match new parse_citation output
+    if not ensure_book_exists(book):
+        print(f"Invalid book: {book}, use the -b flag to list available books.")
+        exit(1)
 
     # Check if verse_parts is None, indicating the whole chapter should be returned
     whole_chapter = verse_parts is None
