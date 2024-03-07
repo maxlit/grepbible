@@ -250,7 +250,8 @@ def get_verse(versions, citation, interleave=False):
                 except IndexError:
                     # Handle cases where one version has fewer verses
                     pass
-            print()  # Newline for separation between verses
+            if i < len(version_list) - 1:
+                print()  # Newline for separation between versions if not interleaving
     else:
         for i, version in enumerate(version_list):
             for verse_line in verses_by_version[version]:
@@ -260,4 +261,5 @@ def get_verse(versions, citation, interleave=False):
                     print(f"{TextColor.ORANGE}{verse_line}{TextColor.RESET}")
                 else:
                     print(f"{verse_line}")
-            print()  # Newline for separation between versions if not interleaving
+            if i < len(version_list) - 1:
+                print()  # Newline for separation between versions if not interleaving
