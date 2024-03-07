@@ -52,7 +52,12 @@ Gdyż stworzenie marności jest poddane, nie dobrowolnie, ale dla tego, który j
 ### Lookup a Chapter
 
 ```sh
-gbib -c "Psalms 23"
+gbib -c 'Psalms 117'
+```
+
+```sh
+O Praise the LORD, all ye nations: praise him, all ye people.
+For his merciful kindness is great toward us: and the truth of the LORD endureth for ever. Praise ye the LORD.
 ```
 
 ### Show a Range of Verses
