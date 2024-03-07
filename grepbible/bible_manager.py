@@ -1,7 +1,7 @@
 from pathlib import Path
 import os, re
 import requests
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipFile
 from pathlib import Path
 from urllib.parse import urljoin
 import importlib.resources as pkg_resources
@@ -93,7 +93,6 @@ def ensure_bible_version_exists(version):
     ensure_data_dir_exists()
     bible_version_path = LOCAL_BIBLE_DIR / version
     if not bible_version_path.exists():
-        print(f"Downloading {version}...")
         download_and_extract_bible(version)
     else:
         pass
@@ -121,19 +120,28 @@ def list_bibles():
         print(f"{acronym} - {full_name} {local_indicator}")
 
 def download_and_extract_bible(version):
-    os.makedirs(LOCAL_BIBLE_DIR, exist_ok=True)
     zip_url = urljoin(DOWNLOAD_ENDPOINT, f"{version}.zip")
+    print(f"Downloading {version} from {zip_url}...")
     zip_path = LOCAL_BIBLE_DIR / f"{version}.zip"
     
     # Download zip file
-    response = requests.get(zip_url)
-    with open(zip_path, 'wb') as zip_file:
-        zip_file.write(response.content)
-    
-    # Extract zip file
-    with ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(LOCAL_BIBLE_DIR)
-    os.remove(zip_path)  # Clean up zip file
+    try:
+        response = requests.get(zip_url, stream=True)
+        if response.status_code == 200:
+            with open(zip_path, 'wb') as zip_file:
+                for chunk in response.iter_content(chunk_size=8192): 
+                    zip_file.write(chunk)
+            # Extract zip file
+            with ZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(LOCAL_BIBLE_DIR)
+            os.remove(zip_path)  # Clean up zip file
+        else:
+            print(f"Error downloading file: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"Request error: {e}")
+    except BadZipFile as e:
+        print(f"Zip file error: {e}")
+        os.remove(zip_path)  # Attempt to clean up corrupt zip file
 
 def parse_citation(citation):
     # This is a simplified pattern and might need adjustments
