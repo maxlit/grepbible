@@ -60,7 +60,10 @@ gbib -c 'Psalms 117'
 gbib -c "Gen 41:29-30"
 ```
 
-![Range of Verses](./gifs/4_range-of-verses.gif)
+```
+Behold, there come seven years of great plenty throughout all the land of Egypt:
+And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
+```
 
 ### Fetch Multiple Disjoint Verses
 
