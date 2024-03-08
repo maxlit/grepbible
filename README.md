@@ -23,6 +23,13 @@ pip install grepbible
 
 This command installs the `grepbible` package and makes the `gbib` command available in your shell.
 
+You might need to update your `PATH` as well (e.g. on Ubuntu):
+
+```sh
+export PATH=$PATH:$(python3 -m site --user-base)/bin
+```
+and add it to `~/.bashrc` to make it persistent
+
 ## Usage
 
 `grepbible` is designed to be straightforward and easy to use from the command line. The default version (unless the flag `-v` is specified) is 'kj' ([KJV](https://en.wikipedia.org/wiki/King_James_Version)), in English.
