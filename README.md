@@ -1,6 +1,6 @@
 # grepbible
 
-`grepbible` is a command-line interface (CLI) tool designed to make searching for Bible verses (in ca. 70 languages) locally (like grepping) and looking up the Bible quotes fast and intuitive.  
+`grepbible` is a command-line interface (CLI) tool designed to make searching for Bible verses (in ca. 60 languages) locally (like grepping) and looking up the Bible quotes fast and intuitive.  
 It also represents a new channel for Bible distribution and aids in language learning, as parallel Bible translations have been used for centuries to learn languages.
 
 Wikipedia article on [Bible citations](https://en.wikipedia.org/wiki/Bible_citation)  
