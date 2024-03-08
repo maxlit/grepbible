@@ -35,9 +35,7 @@ Below are some common usage examples:
 gbib -c "John 3:11"
 ```
 
-```
-Verily, verily, I say unto thee, We speak that we do know, and testify that we have seen; and ye receive not our witness.
-```
+![Look up a single verse](./gifs/1_look-up-a-single-verse.gif)
 
 ### Compare Verses in Different Translations
 
