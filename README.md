@@ -141,7 +141,7 @@ grep -nr $GB -e camel | wc -l # 59
 grep -nr $GB -e wolves | grep sheep
 ```
 
-![local grep](./gifs/7_grep.gif)
+![local grep](./gifs/9_grep.gif)
 
 ## Contributing
 
