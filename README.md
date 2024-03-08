@@ -151,8 +151,13 @@ Result:
 
 ## Contributing
 
-Contributions to `grepbible` are welcome! Whether it's adding new features, improving existing functionality, or reporting issues, your input is valuable.
+Contributions to `grepbible` are welcome! Whether it's improving code, or reporting issues, or spreading the word, or financial support, your input is valuable.  
+
+### Issues/bugs
+
 To raise an issue, go to 'Issues' tab, and click on 'New issue'.
+
+### Code
 
 To contribute code:
 
@@ -162,6 +167,14 @@ To contribute code:
 4. Push your branch and submit a pull request.
 
 Please ensure your code adheres to the project's style and quality standards. For major changes, please open an issue first to discuss what you would like to change.
+
+### Social
+
+Feel free to spread the word or/and use the hashtag `#grepbible` in social media.
+
+### Financial
+
+Feel free to buy me a coffee: [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J1VEX6J)
 
 ## License
 
