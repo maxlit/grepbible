@@ -1,16 +1,17 @@
 # grepbible
 
-`grepbible` is a command-line interface (CLI) tool designed to make searching for Bible verses (in ca. 70 languages) locally (like grepping) and looking up the Bible quotes fast and intuitive. It also represents a new channel for Bible distribution, and helps language learners as well since parallel Bible translations were used for languages learning for centuries.
+`grepbible` is a command-line interface (CLI) tool designed to make searching for Bible verses (in ca. 70 languages) locally (like grepping) and looking up the Bible quotes fast and intuitive.  
+It also represents a new channel for Bible distribution and aids in language learning, as parallel Bible translations have been used for centuries to learn languages.
 
-Wikipedia article on [Bible citations](https://en.wikipedia.org/wiki/Bible_citation)
-The raw text is taken from [Wordproject®](https://www.wordproject.org)
+Wikipedia article on [Bible citations](https://en.wikipedia.org/wiki/Bible_citation)  
+The raw text is taken from [Wordproject®](https://www.wordproject.org), and has undergone processing to fit the specific needs and format of this project.
 
 ## Features
 
-- **Versatile Search Capabilities**: Look up individual verses, ranges of chapters, or specific passages across multiple translations.
+- **Search Capabilities**: Look up individual verses, ranges of chapters, or specific passages across multiple translations.
 - **Multiple Bible Versions**: Easily switch between different Bible translations to compare interpretations and wording.
 - **Local Caching**: Bible versions are downloaded and stored locally for quick access and offline use.
-- **Customizable**: Set your preferred Bible version and customize search options to suit your study needs.
+- **Parallel and interleave text**: Combine text blocks from different translations.
 
 ## Installation
 
@@ -34,7 +35,7 @@ Below are some common usage examples:
 gbib -c "John 3:11"
 ```
 
-```sh
+```
 Verily, verily, I say unto thee, We speak that we do know, and testify that we have seen; and ye receive not our witness.
 ```
 
@@ -44,7 +45,7 @@ Verily, verily, I say unto thee, We speak that we do know, and testify that we h
 gbib -v kj,pl -c "Romans 8:20"
 ```
 
-```sh
+```
 For the creature was made subject to vanity, not willingly, but by reason of him who hath subjected the same in hope,
 Gdyż stworzenie marności jest poddane, nie dobrowolnie, ale dla tego, który je poddał,
 ```
@@ -55,7 +56,7 @@ Gdyż stworzenie marności jest poddane, nie dobrowolnie, ale dla tego, który j
 gbib -c 'Psalms 117'
 ```
 
-```sh
+```
 O Praise the LORD, all ye nations: praise him, all ye people.
 For his merciful kindness is great toward us: and the truth of the LORD endureth for ever. Praise ye the LORD.
 ```
@@ -66,7 +67,7 @@ For his merciful kindness is great toward us: and the truth of the LORD endureth
 gbib -c "Gen 41:29-30"
 ```
 
-```sh
+```
 Behold, there come seven years of great plenty throughout all the land of Egypt:
 And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
 ```
@@ -84,7 +85,7 @@ Show interleave translation of Latin Vulgata to English KJV (line-by-line):
 gbib -c 'Gen 41:29-30' -v kj,vg -i
 ```
 
-```sh
+```
 Behold, there come seven years of great plenty throughout all the land of Egypt:
 ecce septem anni venient fertilitatis magnae in universa terra Aegypti
 
@@ -98,7 +99,7 @@ Block-by block translation (omit the flag `-i`):
  gbib -c 'Gen 41:29-30' -v kj,vg 
 ```
 
-```sh
+```
 Behold, there come seven years of great plenty throughout all the land of Egypt:
 And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
 ecce septem anni venient fertilitatis magnae in universa terra Aegypti
@@ -143,7 +144,7 @@ grep -nr $GB -e wolves | grep sheep
 ```
 
 Result:
-```sh
+```
 ./grepbible_data/kj/Matthew/10.txt:16:Behold, I send you forth as sheep in the midst of wolves: be ye therefore wise as serpents, and harmless as doves.
 ./grepbible_data/kj/Matthew/7.txt:15:Beware of false prophets, which come to you in sheep's clothing, but inwardly they are ravening wolves.
 ```
