@@ -65,7 +65,7 @@ gbib -c "Gen 41:29-30"
 ### Fetch Multiple Disjoint Verses
 
 ```sh
-gbib -c "Genesis 1:1–3"
+gbib -c "Genesis 1:1,3"
 ```
 
 ### Compare different versions
@@ -122,11 +122,7 @@ grep -nr $GB -e camel | wc -l # 59
 grep -nr $GB -e wolves | grep sheep
 ```
 
-Result:
-```
-./grepbible_data/kj/Matthew/10.txt:16:Behold, I send you forth as sheep in the midst of wolves: be ye therefore wise as serpents, and harmless as doves.
-./grepbible_data/kj/Matthew/7.txt:15:Beware of false prophets, which come to you in sheep's clothing, but inwardly they are ravening wolves.
-```
+![local grep](./gifs/7_grep.gif)
 
 ## Contributing
 
