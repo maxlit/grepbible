@@ -43,10 +43,7 @@ gbib -c "John 3:11"
 gbib -v kj,pl -c "Romans 8:20"
 ```
 
-```
-For the creature was made subject to vanity, not willingly, but by reason of him who hath subjected the same in hope,
-Gdyż stworzenie marności jest poddane, nie dobrowolnie, ale dla tego, który je poddał,
-```
+![Compare Verses in Different Translations](./gifs/2_compare-verses-in-different-translations.gif)
 
 ### Lookup a Chapter
 
@@ -54,10 +51,8 @@ Gdyż stworzenie marności jest poddane, nie dobrowolnie, ale dla tego, który j
 gbib -c 'Psalms 117'
 ```
 
-```
-O Praise the LORD, all ye nations: praise him, all ye people.
-For his merciful kindness is great toward us: and the truth of the LORD endureth for ever. Praise ye the LORD.
-```
+![Lookup a Chapter](./gifs/3_look-up-a-chapter.gif)
+
 
 ### Show a Range of Verses
 
@@ -65,10 +60,7 @@ For his merciful kindness is great toward us: and the truth of the LORD endureth
 gbib -c "Gen 41:29-30"
 ```
 
-```
-Behold, there come seven years of great plenty throughout all the land of Egypt:
-And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
-```
+![Range of Verses](./gifs/4_range-of-verses.gif)
 
 ### Fetch Multiple Disjoint Verses
 
@@ -83,13 +75,7 @@ Show interleave translation of Latin Vulgata to English KJV (line-by-line):
 gbib -c 'Gen 41:29-30' -v kj,vg -i
 ```
 
-```
-Behold, there come seven years of great plenty throughout all the land of Egypt:
-ecce septem anni venient fertilitatis magnae in universa terra Aegypti
-
-And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
-quos sequentur septem anni alii tantae sterilitatis ut oblivioni tradatur cuncta retro abundantia consumptura est enim fames omnem terram
-````
+![Compare different versions line-by-line](./gifs/5_range-of-verses-i.gif)
 
 Block-by block translation (omit the flag `-i`):
 
@@ -97,12 +83,7 @@ Block-by block translation (omit the flag `-i`):
  gbib -c 'Gen 41:29-30' -v kj,vg 
 ```
 
-```
-Behold, there come seven years of great plenty throughout all the land of Egypt:
-And there shall arise after them seven years of famine; and all the plenty shall be forgotten in the land of Egypt; and the famine shall consume the land;
-ecce septem anni venient fertilitatis magnae in universa terra Aegypti
-quos sequentur septem anni alii tantae sterilitatis ut oblivioni tradatur cuncta retro abundantia consumptura est enim fames omnem terram
-```
+![Compare different versions block-by-block](./gifs/6_range-of-verses.gif)
 
 For more information on command options and additional features, you can run:
 
