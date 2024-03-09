@@ -110,8 +110,10 @@ def download_and_extract_bible(version):
         print(f"Zip file error: {e}")
         os.remove(zip_path)  # Attempt to clean up corrupt zip file
 
-def get_random_quote(version='kj', interleave=False):
-    version_to_read = version[0] if isinstance(version, list) else version
+def get_random_quote(versions='kj', interleave=False):
+    version_list = [version.strip() for version in versions.split(',')]
+    version_to_read = version_list[0]
+    ensure_bible_version_exists(version_to_read)
     # Select a random book
     book = random.choice(list(BOOK2CHAPTERS.keys()))
     chapters = BOOK2CHAPTERS[book]
@@ -138,7 +140,7 @@ def get_random_quote(version='kj', interleave=False):
                 
                 # Assuming get_verse is defined to take this format and version
                 # This part might need to adjust based on how get_verse is implemented
-                return get_verse(version, random_quote, interleave)
+                return get_verse(versions, random_quote, interleave)
             else:
                 return "No verses found in the selected chapter."
     except FileNotFoundError:
