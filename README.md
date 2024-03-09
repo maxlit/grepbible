@@ -110,6 +110,17 @@ And there shall arise after them seven years of famine; and all the plenty shall
 ecce septem anni venient fertilitatis magnae in universa terra Aegypti
 quos sequentur septem anni alii tantae sterilitatis ut oblivioni tradatur cuncta retro abundantia consumptura est enim fames omnem terram
 ```
+### Random quotes
+
+Time for some fun! One can generate random quotes (in different languages and in parallel as well).
+
+```sh
+gbib -r
+```
+
+![demo](./gifs/240309_gbib_random-quotes.gif)
+
+### Get help
 
 For more information on command options and additional features, you can run:
 
