@@ -4,80 +4,13 @@ import requests
 from zipfile import ZipFile, BadZipFile
 from pathlib import Path
 from urllib.parse import urljoin
+import random
+from grepbible.static.ch2num import BOOK2CHAPTERS, BOOK_ABBREVIATIONS
 import importlib.resources as pkg_resources
 from . import static  # Relative import of the static package
 
 DOWNLOAD_ENDPOINT = "https://powerdb.s3.us-west-2.amazonaws.com/download_endpoint/"
 LOCAL_BIBLE_DIR = Path.home() / 'grepbible_data'
-
-BOOK_ABBREVIATIONS = {
-    'Gen': 'Genesis',
-    'Ex': 'Exodus',
-    'Lev': 'Leviticus',
-    'Num': 'Numbers',
-    'Deut': 'Deuteronomy',
-    'Josh': 'Joshua',
-    'Judg': 'Judges',
-    'Ruth': 'Ruth',
-    '1Sam': '1 Samuel',
-    '2Sam': '2 Samuel',
-    '1Kgs': '1 Kings',
-    '2Kgs': '2 Kings',
-    '1Chr': '1 Chronicles',
-    '2Chr': '2 Chronicles',
-    'Ezra': 'Ezra',
-    'Neh': 'Nehemiah',
-    'Est': 'Esther',
-    'Job': 'Job',
-    'Ps': 'Psalms',
-    'Prov': 'Proverbs',
-    'Eccles': 'Ecclesiastes',
-    'Song': 'Song of Solomon',
-    'Isa': 'Isaiah',
-    'Jer': 'Jeremiah',
-    'Lam': 'Lamentations',
-    'Ezek': 'Ezekiel',
-    'Dan': 'Daniel',
-    'Hos': 'Hosea',
-    'Joel': 'Joel',
-    'Amos': 'Amos',
-    'Obad': 'Obadiah',
-    'Jonah': 'Jonah',
-    'Mic': 'Micah',
-    'Nah': 'Nahum',
-    'Hab': 'Habakkuk',
-    'Zeph': 'Zephaniah',
-    'Hag': 'Haggai',
-    'Zech': 'Zechariah',
-    'Mal': 'Malachi',
-    'Matt': 'Matthew',
-    'Mark': 'Mark',
-    'Luke': 'Luke',
-    'John': 'John',
-    'Acts': 'Acts',
-    'Rom': 'Romans',
-    '1Cor': '1 Corinthians',
-    '2Cor': '2 Corinthians',
-    'Gal': 'Galatians',
-    'Eph': 'Ephesians',
-    'Phil': 'Philippians',
-    'Col': 'Colossians',
-    '1Thess': '1 Thessalonians',
-    '2Thess': '2 Thessalonians',
-    '1Tim': '1 Timothy',
-    '2Tim': '2 Timothy',
-    'Titus': 'Titus',
-    'Philem': 'Philemon',
-    'Heb': 'Hebrews',
-    'James': 'James',
-    '1Pet': '1 Peter',
-    '2Pet': '2 Peter',
-    '1John': '1 John',
-    '2John': '2 John',
-    '3John': '3 John',
-    'Jude': 'Jude',
-    'Rev': 'Revelation',
-}
 
 class TextColor:
     DARK_GREEN = '\033[32m'  # Dark Green ANSI escape code
@@ -149,7 +82,6 @@ def list_books():
     for book in BOOK_ABBREVIATIONS.values():
         print(book)
 
-
 def download_and_extract_bible(version):
     if not is_valid_version(version):
         print(f"Invalid version: {version}")
@@ -177,6 +109,40 @@ def download_and_extract_bible(version):
     except BadZipFile as e:
         print(f"Zip file error: {e}")
         os.remove(zip_path)  # Attempt to clean up corrupt zip file
+
+def get_random_quote(version='kj', interleave=False):
+    version_to_read = version[0] if isinstance(version, list) else version
+    # Select a random book
+    book = random.choice(list(BOOK2CHAPTERS.keys()))
+    chapters = BOOK2CHAPTERS[book]
+    
+    # Select a random chapter
+    chapter = random.randint(1, chapters)
+    
+    # Construct the file path for the chapter
+    chapter_file_path = os.path.join(LOCAL_BIBLE_DIR, version_to_read, book, f"{chapter}.txt")
+    
+    # Read the lines from the chapter file
+    try:
+        with open(chapter_file_path, 'r') as file:
+            lines = [line.strip() for line in file if line.strip()]  # Exclude empty lines
+            
+            # Ensure there are lines to choose from
+            if lines:
+                # Select a random line number (verse number)
+                verse_number = random.randint(1, len(lines))
+                
+                # Construct the Bible quote format
+                random_quote = f"{book} {chapter}:{verse_number}"
+                print(f"{random_quote}")
+                
+                # Assuming get_verse is defined to take this format and version
+                # This part might need to adjust based on how get_verse is implemented
+                return get_verse(version, random_quote, interleave)
+            else:
+                return "No verses found in the selected chapter."
+    except FileNotFoundError:
+        return "Chapter file not found."
 
 def parse_citation(citation):
     # Updated pattern to optionally match "BookName Chapter" without specifying verses

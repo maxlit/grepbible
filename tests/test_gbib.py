@@ -43,6 +43,9 @@ class TestGB(unittest.TestCase):
         self.assertTrue(is_valid_version('bg'))
         self.assertFalse(is_valid_version('xyz'))
 
+    def test_random_quote(self):
+        quote = get_random_quote('kj')
+        self.assertTrue(quote is None) # the check is that it runs through, the quote itself goes to stdout
 
 def main():
     unittest.main()

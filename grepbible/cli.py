@@ -9,6 +9,8 @@ def main():
     parser.add_argument('-l', '--list', action='store_true', help="List all available Bibles.")
     parser.add_argument('-b', '--books', action='store_true', help="List all available books (KJV names used).")
     parser.add_argument('-i', '--interleave', action='store_true', help="Interleave verses for multiple versions.")
+    parser.add_argument('-r', '--random', help='Return a random quote.', action='store_true')
+
 
     args = parser.parse_args()
 
@@ -22,6 +24,8 @@ def main():
             download_and_extract_bible(version)
     elif args.books:
         list_books()
+    elif args.random:
+        get_random_quote(args.version, args.interleave)
     else:
         parser.print_help()
 
