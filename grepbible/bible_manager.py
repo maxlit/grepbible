@@ -150,6 +150,7 @@ def parse_citation(citation):
     # Updated pattern to optionally match "BookName Chapter" without specifying verses
     # The verse part is now optional; if not provided, the entire chapter is considered
     pattern = r'([1-3]?\s?[a-zA-Z]+\.?)\s+(\d+)(?::\s*((?:\d+(?:-\d+)?\s*,?\s*)+))?'
+    citation = citation.strip()
     match = re.match(pattern, citation)
     if not match:
         print(f"Could not parse the citation: {citation}")
