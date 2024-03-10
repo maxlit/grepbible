@@ -21,3 +21,6 @@ gbib -r
 
 echo "-- random quote i different languages"
 gbib -r -v kj,de,vg
+
+echo "parse a quote"
+gbib -c "Gen 41:29-30" --parse
