@@ -6,7 +6,13 @@ from pathlib import Path
 from urllib.parse import urljoin
 import random
 from grepbible.static.ch2num import BOOK2CHAPTERS, BOOK_ABBREVIATIONS
-import importlib.resources as pkg_resources
+try:
+    # Try to use the standard library version if available
+    from importlib import resources as pkg_resources
+except ImportError:
+    # Use the backported version for older Python versions
+    import importlib_resources as pkg_resources
+
 from . import static  # Relative import of the static package
 
 DOWNLOAD_ENDPOINT = "https://powerdb.s3.us-west-2.amazonaws.com/download_endpoint/"
