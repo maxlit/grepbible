@@ -6,6 +6,8 @@ It also represents a new channel for Bible distribution and aids in language lea
 Wikipedia article on [Bible citations](https://en.wikipedia.org/wiki/Bible_citation)  
 The raw text is taken from [Wordproject®](https://www.wordproject.org), and has undergone processing to fit the specific needs and format of this project.
 
+There's a serparate project for the web UI: [grepbible-server](https://github.com/maxlit/grepbible-server.git). Its demo is available at [langtools.io/gb](https://langtools.io/gb)  
+
 ## Features
 
 - **Search Capabilities**: Look up individual verses, ranges of chapters, or specific passages across multiple translations.
