@@ -22,6 +22,9 @@ faiss-cpu = "^1.11.0"
 langchain = "^0.3.25"
 langdetect = "^1.0.9"
 
+[tool.poetry.scripts]
+grepbible = "grepbible.cli:main"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
