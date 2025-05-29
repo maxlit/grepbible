@@ -62,7 +62,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', default="paraphrase-multilingual-MiniLM-L12-v2",
                        help='Name of the sentence transformer model to use')
     parser.add_argument('--top-k', type=int, default=5, help='Number of results to return')
-    parser.add_argument('--threshold', type=float, help='Maximum distance threshold (lower is better)')
+    parser.add_argument('--threshold', type=float, help='cosine similarity threshold')
     parser.add_argument('--show-scores', action='store_true', help='Show L2 distance scores in output')
     
     args = parser.parse_args()
