@@ -47,7 +47,7 @@ def main():
         else:
             from grepbible.fuzz.fuzz_search import fuzzy_grep
             bible_folder = Path.home() / "grepbible_data" / args.version
-            results = fuzzy_grep(bible_folder, args.s, threshold=70)
+            results = fuzzy_grep(bible_folder, args.s, threshold=80)
             for file, lineno, score, line in results:
                 print(f"{file}:{lineno}:{line}")
     elif args.citation:

@@ -165,6 +165,19 @@ grep -nr $GB -e wolves | grep sheep
 
 ![local grep](./gifs/9_grep.gif)
 
+### Fuzzy search
+
+The `-s` option enables fuzzy search, which is helpful when you're not sure about the exact wording or struggling with the grammar of archaic language:
+
+```sh
+gbib -s 'I was delivered to my strong enemy'
+```
+
+```
+~/grepbible_data/kj/Psalms/18.txt:17:He delivered me from my strong enemy, and from them which hated me: for they were too strong for me.
+~/grepbible_data/kj/2 Samuel/22.txt:18:He delivered me from my strong enemy, and from them that hated me: for they were too strong for me.
+```
+
 ## Contributing
 
 Contributions to `grepbible` are welcome! Whether it's improving code, or reporting issues, or spreading the word, or financial support, your input is valuable.  
