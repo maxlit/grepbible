@@ -26,8 +26,13 @@ def query_rag(query, index_root="~/data/bible/rag_index", lang=None,
     meta_path = index_root / lang / model_name / "metadata.pkl"
 
     if not index_path.exists() or not meta_path.exists():
-        print(f"No index for language '{lang}' with model '{model_name}' in {index_root}")
-        return []
+        raise FileNotFoundError(
+            f"No RAG index found for language '{lang}' with model '{model_name}' in {index_root}\n"
+            f"To create the index, first install ML dependencies with:\n"
+            f"pip install grepbible[ml]\n"
+            f"Then create the RAG index by running:\n"
+            f"gbib -v {lang} --rag"
+        )
 
     query_vector = model.encode([query])[0]
     # Normalize the query vector

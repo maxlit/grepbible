@@ -2,6 +2,7 @@ import argparse
 import json
 from pathlib import Path
 from grepbible.bible_manager import *
+import sys
 
 DEFAULT_RAG_THRESHOLD = 0.3 # depends strongly on the model used (and language in case of multilingual models), and the query
 DEFAULT_FUZZ_THRESHOLD = 0.85
@@ -16,13 +17,26 @@ def main():
     parser.add_argument('-i', '--interleave', action='store_true', help="Interleave verses for multiple versions.")
     parser.add_argument('-r', '--random', help='Return a random quote.', action='store_true')
     parser.add_argument('-s', help='Search in Bible text', metavar='QUERY')
-    parser.add_argument('--rag', action='store_true', help='Use semantic search instead of fuzzy matching (requires ML dependencies)')
+    parser.add_argument('--rag', action='store_true', help='With -s: use semantic search. Without -s: build RAG index for version(s)')
     parser.add_argument('--threshold', type=float, help=f'Useful only for search. Minimum similarity threshold between 0 and 1 (default: {DEFAULT_RAG_THRESHOLD} for RAG, {DEFAULT_FUZZ_THRESHOLD} for fuzzy)')
     parser.add_argument('--parse', action='store_true', help='(technical) Parse the citation and return JSON output')
 
     args = parser.parse_args()
 
-    if args.list:
+    if args.rag and not args.s:  # Build RAG index without search
+        try:
+            from grepbible.rag.rag_indexer import index_all_languages
+        except ImportError:
+            print("ML dependencies not installed. Please install them with:")
+            print("pip install grepbible[ml]")
+            sys.exit(1)
+            
+        for version in args.version.split(','):
+            print(f"Building RAG index for version {version}...")
+            bible_folder = Path.home() / "grepbible_data" / version
+            index_folder = Path.home() / "data/bible/rag_index"
+            index_all_languages(bible_folder, index_folder=index_folder)
+    elif args.list:
         list_bibles()
     elif args.citation and args.parse:
         parsed_details = parse_citation(args.citation)
