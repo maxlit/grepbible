@@ -14,9 +14,9 @@ def detect_language(text):
     return detect(text)
 
 def query_rag(query, index_root="~/data/bible/rag_index", lang=None, 
-              model_name="paraphrase-multilingual-MiniLM-L12-v2", top_k=5, threshold=None):
+              model_name="all-MiniLM-L6-v2", top_k=5, threshold=None):
     if not lang:
-        lang = detect_language(query)
+        lang = detect_language(query) 
         print(f"Detected language: {lang}")
     
     model = load_model(model_name)
@@ -42,15 +42,25 @@ def query_rag(query, index_root="~/data/bible/rag_index", lang=None,
     
     results = []
     for score, idx in zip(D[0], I[0]):
-        # Convert L2 distance to cosine similarity
-        # cos_sim = 1 - (score ** 2) / 2  # This works because vectors are normalized
-        if threshold is not None and score < threshold:  # Note: for cosine similarity, higher is better
+        if threshold is not None and score < threshold:
             continue
-        results.append({
-            "text": docs[idx].page_content,
-            "source": docs[idx].metadata["source"],
-            "score": float(score)
-        })
+            
+        # Get the source file and content
+        source_file = docs[idx].metadata["source"]
+        content = docs[idx].page_content
+        
+        # Find the line number by reading the file
+        with open(source_file, 'r') as f:
+            for line_num, line in enumerate(f, 1):
+                if line.strip() == content:
+                    results.append({
+                        "text": content,
+                        "source": source_file,
+                        "line": line_num,
+                        "score": float(score)
+                    })
+                    break
+
     return results
 
 if __name__ == "__main__":
@@ -59,7 +69,7 @@ if __name__ == "__main__":
                        help='Folder containing the RAG index')
     parser.add_argument('--query', help='Query to search for. If not provided, enters interactive mode')
     parser.add_argument('--lang', help='Language/version tag (e.g., kj for King James). If not provided, will try to auto-detect')
-    parser.add_argument('--model', default="paraphrase-multilingual-MiniLM-L12-v2",
+    parser.add_argument('--model', default="all-MiniLM-L6-v2",
                        help='Name of the sentence transformer model to use')
     parser.add_argument('--top-k', type=int, default=5, help='Number of results to return')
     parser.add_argument('--threshold', type=float, help='cosine similarity threshold')
@@ -72,7 +82,7 @@ if __name__ == "__main__":
                           model_name=args.model, top_k=args.top_k, threshold=args.threshold)
         for i, res in enumerate(results, 1):
             score_text = f" — Score: {res['score']:.3f}" if args.show_scores else ""
-            print(f"\nResult {i}{score_text} — Source: {res['source']}\n{res['text']}")
+            print(f"\nResult {i}{score_text} — Source: {res['source']} (Line {res['line']})\n{res['text']}")
     else:
         while True:
             q = input("\n🔍 Enter your query (or 'q' to quit): ")
@@ -82,4 +92,4 @@ if __name__ == "__main__":
                               model_name=args.model, top_k=args.top_k, threshold=args.threshold)
             for i, res in enumerate(results, 1):
                 score_text = f" — Score: {res['score']:.3f}" if args.show_scores else ""
-                print(f"\nResult {i}{score_text} — Source: {res['source']}\n{res['text']}")
+                print(f"\nResult {i}{score_text} — Source: {res['source']} (Line {res['line']})\n{res['text']}")

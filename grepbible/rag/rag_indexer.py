@@ -22,7 +22,7 @@ def load_line_chunks(folder_path, lang_tag):
                     ))
     return docs
 
-def build_index(docs, lang_tag, model_name="paraphrase-multilingual-MiniLM-L12-v2", index_folder="rag_index", batch_size=1000):
+def build_index(docs, lang_tag, model_name="all-MiniLM-L6-v2", index_folder="rag_index", batch_size=1000):
     model = SentenceTransformer(model_name)
     out_dir = Path(index_folder) / lang_tag / model_name
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -46,7 +46,7 @@ def build_index(docs, lang_tag, model_name="paraphrase-multilingual-MiniLM-L12-v
     with open(out_dir / "metadata.pkl", "wb") as f:
         pickle.dump(docs, f)
 
-def index_all_languages(base_folder, model_name="paraphrase-multilingual-MiniLM-L12-v2", index_folder="rag_index"):
+def index_all_languages(base_folder, model_name="all-MiniLM-L6-v2", index_folder="rag_index"):
     base_path = Path(base_folder)
     if base_path.is_dir():
         folder_tag = base_path.name  # Use the folder name as the tag
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Index text files for RAG retrieval')
     parser.add_argument('--input-folder', required=True, help='Input folder containing text files')
     parser.add_argument('--index-folder', required=True, help='Output folder for the RAG index')
-    parser.add_argument('--model', default="paraphrase-multilingual-MiniLM-L12-v2",
+    parser.add_argument('--model', default="all-MiniLM-L6-v2",
                        help='Name of the sentence transformer model to use')
     
     args = parser.parse_args()

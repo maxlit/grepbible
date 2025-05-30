@@ -10,7 +10,7 @@ def fuzzy_grep(folder, query, threshold=75, scorer=fuzz.partial_ratio):
             for lineno, line in enumerate(f, 1):
                 line = line.strip()
                 score = scorer(query, line)
-                if score >= threshold:
+                if score/100. >= threshold:
                     matches.append((file_path, lineno, score, line))
     matches.sort(reverse=True, key=lambda x: x[2])  # sort by score descending
     return matches
