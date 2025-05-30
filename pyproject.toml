@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "grepbible"
-version = "0.1.0"
+version = "0.3.1"
 description = ""
 authors = ["Maxim Litvak <maxim@litvak.eu>"]
 license = "MIT"
@@ -9,9 +9,14 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 requests = "^2.31.0"
-pytest = "^8.0.2"
 importlib-resources = "^6.1.3"
 rapidfuzz = "^3.13.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.2"
 
 [tool.poetry.group.ml]
 optional = true
@@ -23,7 +28,7 @@ langchain = "^0.3.25"
 langdetect = "^1.0.9"
 
 [tool.poetry.scripts]
-grepbible = "grepbible.cli:main"
+gbib = "grepbible.cli:main"
 
 [build-system]
 requires = ["poetry-core"]

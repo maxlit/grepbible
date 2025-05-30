@@ -15,19 +15,6 @@ def main():
     parser.add_argument('-s', help='Search in Bible text', metavar='QUERY')
     parser.add_argument('--parse', action='store_true', help='(technical) Parse the citation and return JSON output')
 
-    # Add search-related arguments
-    search_group = parser.add_argument_group('search options')
-    search_group.add_argument('--search', help='Search text in Bible verses')
-    search_group.add_argument('--rag', action='store_true', help='Use RAG (semantic) search instead of fuzzy matching')
-    search_group.add_argument('--top-k', type=int, default=5, help='Number of results to return')
-    search_group.add_argument('--threshold', type=float, help='Minimum similarity threshold')
-    search_group.add_argument('--show-scores', action='store_true', help='Show similarity scores in output')
-    search_group.add_argument('--model', default="paraphrase-multilingual-MiniLM-L12-v2",
-                            help='Model name for RAG search (only with --rag)')
-    search_group.add_argument('--scorer', choices=['partial', 'ratio', 'token_sort', 'token_set',
-                            'partial_token_sort', 'partial_token_set'], 
-                            default='partial', help='Fuzzy matching strategy (without --rag)')
-
     args = parser.parse_args()
 
     if args.list:
