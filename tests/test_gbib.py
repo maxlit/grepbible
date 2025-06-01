@@ -1,12 +1,21 @@
 import unittest
 import sys
 from pathlib import Path
+import os
 
 # Add the root directory to PYTHONPATH
 sys.path.append(str(Path(__file__).parent.parent))
 #import grepbible as gb
 from grepbible.bible_manager import *
 from grepbible.utils import grep_to_citation
+
+# Add this at the top level
+def skip_in_ci():
+    """Skip test if running in CI environment"""
+    return unittest.skipIf(
+        os.getenv('CI') == 'true',
+        'Test skipped in CI environment'
+    )
 
 class TestGB(unittest.TestCase):
     def test_parse_citation(self):
@@ -61,6 +70,12 @@ class TestGB(unittest.TestCase):
         # Test error handling
         with self.assertRaises(ValueError):
             grep_to_citation("invalid:format")
+
+@skip_in_ci()
+class TestRAG(unittest.TestCase):
+    def test_rag_query(self):
+        # Your RAG test here
+        pass
 
 def main():
     unittest.main()
