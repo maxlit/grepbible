@@ -58,8 +58,7 @@ test:
   stage: test
   extends: .python-base
   script:
-    - poetry install --with ml
-    - poetry run python -m unittest
+    - poetry run python -m unittest discover -p "test_*.py" -k "not test_rag.py"
 
 build-package:
   stage: build

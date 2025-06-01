@@ -71,12 +71,6 @@ class TestGB(unittest.TestCase):
         with self.assertRaises(ValueError):
             grep_to_citation("invalid:format")
 
-@skip_in_ci()
-class TestRAG(unittest.TestCase):
-    def test_rag_query(self):
-        # Your RAG test here
-        pass
-
 def main():
     unittest.main()
 
