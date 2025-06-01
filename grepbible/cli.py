@@ -2,6 +2,7 @@ import argparse
 import json
 from pathlib import Path
 from grepbible.bible_manager import *
+from grepbible.utils import grep_to_citation
 import sys
 
 DEFAULT_RAG_THRESHOLD = 0.3 # depends strongly on the model used (and language in case of multilingual models), and the query
@@ -20,6 +21,7 @@ def main():
     parser.add_argument('--rag', action='store_true', help='With -s: use semantic search. Without -s: build RAG index for version(s)')
     parser.add_argument('--threshold', type=float, help=f'Useful only for search. Minimum similarity threshold between 0 and 1 (default: {DEFAULT_RAG_THRESHOLD} for RAG, {DEFAULT_FUZZ_THRESHOLD} for fuzzy)')
     parser.add_argument('--parse', action='store_true', help='(technical) Parse the citation and return JSON output')
+    parser.add_argument('--grep', action='store_true', help='(technical) Output search results in grep format (file:line:text)')
 
     args = parser.parse_args()
 
@@ -50,14 +52,16 @@ def main():
             threshold = args.threshold if args.threshold is not None else DEFAULT_RAG_THRESHOLD
             results = query_rag(args.s, lang=args.version, threshold=threshold)
             for res in results:
-                print(f"{res['source']}:{res['line']}:{res['text']}")
+                grep_line = f"{res['source']}:{res['line']}:{res['text']}"
+                print(grep_line if args.grep else grep_to_citation(grep_line))
         else:
             from grepbible.fuzz.fuzz_search import fuzzy_grep
             bible_folder = Path.home() / "grepbible_data" / args.version
             threshold = args.threshold if args.threshold is not None else DEFAULT_FUZZ_THRESHOLD
             results = fuzzy_grep(bible_folder, args.s, threshold=threshold)
             for file, lineno, score, line in results:
-                print(f"{file}:{lineno}:{line}")
+                grep_line = f"{file}:{lineno}:{line}"
+                print(grep_line if args.grep else grep_to_citation(grep_line))
     elif args.citation:
         get_verse(args.version, args.citation, args.interleave)
     elif args.download:

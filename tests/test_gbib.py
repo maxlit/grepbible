@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 #import grepbible as gb
 from grepbible.bible_manager import *
+from grepbible.utils import grep_to_citation
 
 class TestGB(unittest.TestCase):
     def test_parse_citation(self):
@@ -46,6 +47,20 @@ class TestGB(unittest.TestCase):
     def test_random_quote(self):
         quote = get_random_quote('kj')
         self.assertTrue(True) # the check is that it runs through, the quote itself goes to stdout
+
+    def test_grep_to_citation(self):
+        grep_line = "~/grepbible_data/kj/Daniel/10.txt:3:I ate no pleasant bread, neither came flesh nor wine in my mouth, neither did I anoint myself at all, till three whole weeks were fulfilled."
+        expected = "Daniel 10:3 I ate no pleasant bread, neither came flesh nor wine in my mouth, neither did I anoint myself at all, till three whole weeks were fulfilled."
+        self.assertEqual(grep_to_citation(grep_line), expected)
+        
+        # Test with different path formats
+        grep_line2 = "data/bible/Genesis/1.txt:1:In the beginning"
+        expected2 = "Genesis 1:1 In the beginning"
+        self.assertEqual(grep_to_citation(grep_line2), expected2)
+        
+        # Test error handling
+        with self.assertRaises(ValueError):
+            grep_to_citation("invalid:format")
 
 def main():
     unittest.main()
