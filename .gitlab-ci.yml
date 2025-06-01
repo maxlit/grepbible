@@ -64,7 +64,7 @@ build-package:
   stage: build
   extends: .python-base
   script:
-    - poetry run python setup.py sdist bdist_wheel
+    - poetry build
   artifacts:
     paths:
       - dist/*.whl
@@ -77,5 +77,5 @@ release-package:
     - tags
   script:
     - pip install twine
-    - python setup.py sdist bdist_wheel
+    - poetry build
     - TWINE_PASSWORD=${PYPI_PASSWORD} TWINE_USERNAME=${PYPI_USERNAME} python -m twine upload --repository pypi dist/* --verbose

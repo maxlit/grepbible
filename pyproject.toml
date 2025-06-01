@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "grepbible"
-version = "0.3.1"
+version = "0.3.3"
 description = ""
 authors = ["Maxim Litvak <maxim@litvak.eu>"]
 license = "MIT"
