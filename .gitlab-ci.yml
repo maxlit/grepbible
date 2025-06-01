@@ -58,7 +58,7 @@ test:
   stage: test
   extends: .python-base
   script:
-    - poetry run python -m unittest discover -p "test_*.py" -k "not test_rag.py"
+    - poetry run python -m unittest $(find . -name "test_*.py" ! -name "test_rag.py")
 
 build-package:
   stage: build
