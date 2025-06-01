@@ -58,6 +58,7 @@ test:
   stage: test
   extends: .python-base
   script:
+    - poetry install --with ml
     - poetry run python -m unittest
 
 build-package:
