@@ -86,4 +86,5 @@ pattern = "^(?P<base>\\d+\\.\\d+\\.\\d+)$"  # Matches tags like "1.2.3"
 [[tool.poetry.source]]
 name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
+default = false
+secondary = true
