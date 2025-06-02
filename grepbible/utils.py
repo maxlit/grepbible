@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 def grep_to_citation(grep_line):
     """Convert grep-style Bible reference to citation format.
@@ -14,14 +15,15 @@ def grep_to_citation(grep_line):
         "Daniel 10:3 I ate no pleasant bread"
     """
     try:
-        # Split the line into path and content
-        file_path, verse_num, text = grep_line.rsplit(':', 2)
+        # Use regex to match the pattern: path/to/Book/Chapter.txt:Verse:Text
+        pattern = r'^(.+?)/([^/]+)/(\d+)\.txt:(\d+):(.+)$'
+        match = re.match(pattern, grep_line)
+        if not match:
+            raise ValueError(f"Invalid grep format: {grep_line}")
         
-        # Extract book and chapter from path
-        path = Path(file_path)
-        book = path.parent.name
-        chapter = path.stem  # removes .txt extension
+        # Extract components
+        _, book, chapter, verse_num, text = match.groups()
         
         return f"{book} {chapter}:{verse_num} {text}"
-    except ValueError:
-        raise ValueError(f"Invalid grep format: {grep_line}")
+    except Exception as e:
+        raise ValueError(f"Invalid grep format: {grep_line}") from e
