@@ -146,7 +146,7 @@ Obviously, one can search with the fuzzy logic also the exact text.
 The `-s` option enables fuzzy search, which is helpful when you're not sure about the exact wording or struggling with the grammar of archaic language:
 
 ```sh
-gbib --rag -s 'Every prudent man deals with knowledge'
+gbib -s 'Every prudent man deals with knowledge'
 ```
 
 ```
@@ -156,13 +156,13 @@ gbib --rag -s 'Every prudent man deals with knowledge'
 If the quote deviates significantly from the original, the result might be empty.
 
 ```sh
-gbib --rag -s 'Every honest man deals with knowledge'
+gbib -s 'Every honest man deals with knowledge'
 ```
 
 However, one can adjust the threshold (current default is 0.85 which might change) of the similarity:
 
 ```sh
-gbib --rag -s 'Every honest man deals with knowledge' --threshold 0.7
+gbib -s 'Every honest man deals with knowledge' --threshold 0.7
 ```
 which gives the proper result (might lead to unexpected results for short queries).
 
