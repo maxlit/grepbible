@@ -146,13 +146,29 @@ Obviously, one can search with the fuzzy logic also the exact text.
 The `-s` option enables fuzzy search, which is helpful when you're not sure about the exact wording or struggling with the grammar of archaic language:
 
 ```sh
-gbib -s 'I was delivered to my strong enemy'
+gbib --rag -s 'Every prudent man deals with knowledge'
 ```
 
 ```
-~/grepbible_data/kj/Psalms/18.txt:17:He delivered me from my strong enemy, and from them which hated me: for they were too strong for me.
-~/grepbible_data/kj/2 Samuel/22.txt:18:He delivered me from my strong enemy, and from them that hated me: for they were too strong for me.
+(Proverbs 13:16) Every prudent man dealeth with knowledge: but a fool layeth open his folly.
 ```
+
+If the quote deviates significantly from the original, the result might be empty.
+
+```sh
+gbib --rag -s 'Every honest man deals with knowledge'
+```
+
+However, one can adjust the threshold (current default is 0.85 which might change) of the similarity:
+
+```sh
+gbib --rag -s 'Every honest man deals with knowledge' --threshold 0.7
+```
+which gives the proper result (might lead to unexpected results for short queries).
+
+```
+(Proverbs 13:16) Every prudent man dealeth with knowledge: but a fool layeth open his folly.    
+````
 
 ### Semantic search
 
@@ -184,13 +200,13 @@ gbib --rag -s 'Horses run on rocks'
 ```
 
 ```
-Joel 2:4 The appearance of them is as the appearance of horses; and as horsemen, so shall they run.
-Amos 6:Shall horses run upon the rock? will one plow there with oxen? for ye have turned judgment into gall, and the fruit of righteousness into hemlock 
-Isaiah 63:13 That led them through the deep, as an horse in the wilderness, that they should not stumble?
-Zechariah 6:6 The black horses which are therein go forth into the north country; and the white go forth after them; and the grisled go forth toward the south country.
+(Joel 2:4) The appearance of them is as the appearance of horses; and as horsemen, so shall they run.
+(Amos 6:12) Shall horses run upon the rock? will one plow there with oxen? for ye have turned judgment into gall, and the fruit of righteousness into hemlock 
+(Isaiah 63:13) That led them through the deep, as an horse in the wilderness, that they should not stumble?
+(Zechariah 6:6) The black horses which are therein go forth into the north country; and the white go forth after them; and the grisled go forth toward the south country.
 ```
 
-Since the similar sense is not an exact science, some outcomes might be quite off.
+Since the similar sense is not an exact science, some outcomes might be quite off. One can also set `--threshold` between 0 and 1 (the default value is/was 0.3) to adjust the similarity threshold, to extend or reduce the list of the outcomes.
 
 #### Search with grep
 
