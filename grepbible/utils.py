@@ -24,6 +24,6 @@ def grep_to_citation(grep_line):
         # Extract components
         _, book, chapter, verse_num, text = match.groups()
         
-        return f"{book} {chapter}:{verse_num} {text}"
+        return f"({book} {chapter}:{verse_num}) {text}"
     except Exception as e:
         raise ValueError(f"Invalid grep format: {grep_line}") from e

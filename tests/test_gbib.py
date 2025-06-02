@@ -59,17 +59,17 @@ class TestGB(unittest.TestCase):
 
     def test_grep_to_citation(self):
         grep_line = "~/grepbible_data/kj/Daniel/10.txt:3:I ate no pleasant bread, neither came flesh nor wine in my mouth, neither did I anoint myself at all, till three whole weeks were fulfilled."
-        expected = "Daniel 10:3 I ate no pleasant bread, neither came flesh nor wine in my mouth, neither did I anoint myself at all, till three whole weeks were fulfilled."
+        expected = "(Daniel 10:3) I ate no pleasant bread, neither came flesh nor wine in my mouth, neither did I anoint myself at all, till three whole weeks were fulfilled."
         self.assertEqual(grep_to_citation(grep_line), expected)
         
         # Test with different path formats
         grep_line2 = "data/bible/Genesis/1.txt:1:In the beginning"
-        expected2 = "Genesis 1:1 In the beginning"
+        expected2 = "(Genesis 1:1) In the beginning"
         self.assertEqual(grep_to_citation(grep_line2), expected2)
 
         # Test with different path formats
         grep_line3 = "~/grepbible_data/kj/kj/Amos/6.txt:12:Shall horses run upon the rock? will one plow there with oxen? for ye have turned judgment into gall, and the fruit of righteousness into hemlock:"
-        expected3 = "Amos 6:12 Shall horses run upon the rock? will one plow there with oxen? for ye have turned judgment into gall, and the fruit of righteousness into hemlock:"
+        expected3 = "(Amos 6:12) Shall horses run upon the rock? will one plow there with oxen? for ye have turned judgment into gall, and the fruit of righteousness into hemlock:"
         self.assertEqual(grep_to_citation(grep_line3), expected3)
         
         # Test error handling
