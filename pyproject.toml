@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "grepbible"
-version = "0.3.3"
+version = "0.0.0"
 description = ""
 authors = ["Maxim Litvak <maxim@litvak.eu>"]
 license = "MIT"
@@ -49,6 +49,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"
+poetry-dynamic-versioning = "^1.2.0"
 
 [tool.poetry.group.ml]
 optional = true
@@ -73,5 +74,11 @@ peft = ">=0.4.0"
 gbib = "grepbible.cli:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+pattern = "^(?P<base>\\d+\\.\\d+\\.\\d+)$"  # Matches tags like "1.2.3"
