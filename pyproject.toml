@@ -20,7 +20,7 @@ pydantic = { version = ">=1.6.2,<2.0.0", optional = true }
 langdetect = { version = "^1.0.9", optional = true }
 numpy = { version = "<1.26.0,>=1.18.5", optional = true }
 scipy = { version = ">=1.9.0", optional = true }
-scikit-learn = { version = "*", optional = true }
+scikit-learn = { version = "1.6.1", optional = true }
 jsonschema = { version = ">=3.0", optional = true }
 toolz = { version = "*", optional = true }
 srsly = { version = ">=2.4.0,<3.0.0", optional = true }
@@ -64,7 +64,7 @@ pydantic = "<2.0.0,>=1.6.2"
 langdetect = "^1.0.9"
 numpy = "<1.26.0,>=1.18.5"
 scipy = ">=1.9.0"
-scikit-learn = "*"
+scikit-learn = "1.6.1"
 jsonschema = ">=3.0"
 toolz = "*"
 srsly = ">=2.4.0,<3.0.0"
