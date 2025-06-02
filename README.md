@@ -132,7 +132,67 @@ gbib --help
 
 ![demo](./gifs/8_usage.gif)
 
-### Use with grep
+### Search text
+
+One can do three types of text search:  
+- Exact search
+- Approximate (fuzzy) search - it might catch the typos, words omission and grammar misspelling
+- Semantic search - it looks for the quotes with the similar sense (AI augmented search)
+
+Obviously, one can search with the fuzzy logic also the exact text.
+
+### Fuzzy search
+
+The `-s` option enables fuzzy search, which is helpful when you're not sure about the exact wording or struggling with the grammar of archaic language:
+
+```sh
+gbib -s 'I was delivered to my strong enemy'
+```
+
+```
+~/grepbible_data/kj/Psalms/18.txt:17:He delivered me from my strong enemy, and from them which hated me: for they were too strong for me.
+~/grepbible_data/kj/2 Samuel/22.txt:18:He delivered me from my strong enemy, and from them that hated me: for they were too strong for me.
+```
+
+### Semantic search
+
+Semantic search uses a technique called RAG (Retrieval-Augmented Generation), which retrieves relevant text chunks via vector embeddings and optionally generates answers using a language model.  
+In this case, everything runs locally — no prompts are sent to any online services — although the search may be slower than simple keyword matching.  
+
+To enable semantic search, you first need to install the extra packages:
+
+```sh
+pip install grepbible[ml]
+```
+
+Then, build the RAG index with:
+
+```sh
+gbib --rag
+```
+
+Or for a specific version (e.g. German), use:
+
+```sh
+gbib --rag -v de
+```
+
+You can now perform semantic search with the `--rag -s` option. For example:
+
+```sh
+gbib --rag -s 'Horses run on rocks'
+```
+
+```
+Joel 2:4 The appearance of them is as the appearance of horses; and as horsemen, so shall they run.
+Amos 6:Shall horses run upon the rock? will one plow there with oxen? for ye have turned judgment into gall, and the fruit of righteousness into hemlock 
+Isaiah 63:13 That led them through the deep, as an horse in the wilderness, that they should not stumble?
+Zechariah 6:6 The black horses which are therein go forth into the north country; and the white go forth after them; and the grisled go forth toward the south country.
+```
+
+Since the similar sense is not an exact science, some outcomes might be quite off.
+
+#### Search with grep
 
 One can literally use `grep` to look up the verses and leverage `gbib` only for downloading the sources. Here's how.
 
@@ -164,19 +224,6 @@ grep -nr $GB -e wolves | grep sheep
 ```
 
 ![local grep](./gifs/9_grep.gif)
-
-### Fuzzy search
-
-The `-s` option enables fuzzy search, which is helpful when you're not sure about the exact wording or struggling with the grammar of archaic language:
-
-```sh
-gbib -s 'I was delivered to my strong enemy'
-```
-
-```
-~/grepbible_data/kj/Psalms/18.txt:17:He delivered me from my strong enemy, and from them which hated me: for they were too strong for me.
-~/grepbible_data/kj/2 Samuel/22.txt:18:He delivered me from my strong enemy, and from them that hated me: for they were too strong for me.
-```
 
 ## Contributing
 
