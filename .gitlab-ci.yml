@@ -86,10 +86,9 @@ test-ml-install:
   extends: .python-base
   script:
     - apt-get update && apt-get install -y build-essential gcc
-    - pip install -v grepbible[ml]
-    - python -c "from grepbible.rag import query_rag; print('ML dependencies successfully installed')"
-    - gbib --rag
-    - pip install pytest
-    - python -m pytest tests/test_rag.py -v
+    - uv sync --extra ml
+    - uv run python -c "from grepbible.rag import query_rag; print('ML dependencies successfully installed')"
+    - uv run gbib --rag
+    - uv run python -m pytest tests/test_rag.py -v
   when: manual
   allow_failure: true
