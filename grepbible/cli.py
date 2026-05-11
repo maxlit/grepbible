@@ -36,7 +36,7 @@ def main():
         for version in args.version.split(','):
             print(f"Building RAG index for version {version}...")
             bible_folder = Path.home() / "grepbible_data" / version
-            index_folder = Path.home() / "data/bible/rag_index"
+            index_folder = Path.home() / "grepbible_data" / "rag_index"
             index_all_languages(bible_folder, index_folder=index_folder)
     elif args.list:
         list_bibles()

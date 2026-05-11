@@ -6,19 +6,20 @@ stages:
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
   paths:
     - .cache/pip
-    - venv/
+    - .cache/uv
 
 .python-base:
-  image: python:3.11.7
+  image: python:3.13
   before_script:
-    - python -V  # Print out python version for debugging
-    - pip install  --progress-bar off poetry==1.4.2  # Install Poetry
-    - poetry -vvv install --no-root
+    - python -V
+    - pip install --progress-bar off uv
+    - uv sync --no-editable
 
 mypy:
   stage: static
@@ -58,14 +59,13 @@ test:
   stage: test
   extends: .python-base
   script:
-    - poetry run python -m unittest $(find . -name "test_*.py" ! -name "test_rag.py")
+    - uv run python -m unittest $(find tests -name "test_*.py" ! -name "test_rag.py")
 
 build-package:
   stage: build
   extends: .python-base
   script:
-    - pip install poetry-dynamic-versioning
-    - poetry build
+    - uv build
   artifacts:
     paths:
       - dist/*.whl
@@ -77,8 +77,8 @@ release-package:
   only:
     - tags
   script:
-    - pip install poetry-dynamic-versioning twine
-    - poetry build
+    - uv build
+    - pip install twine
     - TWINE_PASSWORD=${PYPI_PASSWORD} TWINE_USERNAME=${PYPI_USERNAME} python -m twine upload --repository pypi dist/* --verbose
 
 test-ml-install:
@@ -86,10 +86,10 @@ test-ml-install:
   extends: .python-base
   script:
     - apt-get update && apt-get install -y build-essential gcc
-    - pip install -v grepbible[ml]     # -v for verbose output
+    - pip install -v grepbible[ml]
     - python -c "from grepbible.rag import query_rag; print('ML dependencies successfully installed')"
     - gbib --rag
     - pip install pytest
-    - python -m pytest tests/test_rag.py -v  # Run RAG tests with verbose output
+    - python -m pytest tests/test_rag.py -v
   when: manual
   allow_failure: true

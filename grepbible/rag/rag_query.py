@@ -13,7 +13,7 @@ def detect_language(text):
     from langdetect import detect
     return detect(text)
 
-def query_rag(query, index_root="~/data/bible/rag_index", lang=None, 
+def query_rag(query, index_root= Path.home() / "grepbible_data" / "rag_index", lang=None, 
               model_name="all-MiniLM-L6-v2", top_k=5, threshold=None):
     if not lang:
         lang = detect_language(query) 
@@ -70,7 +70,7 @@ def query_rag(query, index_root="~/data/bible/rag_index", lang=None,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Query the RAG index')
-    parser.add_argument('--index-folder', default="~/data/bible/rag_index", 
+    parser.add_argument('--index-folder', default=Path.home() / "grepbible_data" / "rag_index", 
                        help='Folder containing the RAG index')
     parser.add_argument('--query', help='Query to search for. If not provided, enters interactive mode')
     parser.add_argument('--lang', help='Language/version tag (e.g., kj for King James). If not provided, will try to auto-detect')
