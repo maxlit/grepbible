@@ -1,10 +1,16 @@
 from pathlib import Path
 from sentence_transformers import SentenceTransformer
-from langchain.schema import Document
 import faiss
 import numpy as np
 import pickle
 import argparse
+from dataclasses import dataclass, field
+from typing import Any
+
+@dataclass
+class Document:
+    page_content: str = ""
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 def load_line_chunks(folder_path, lang_tag):
     docs = []

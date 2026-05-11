@@ -5,6 +5,24 @@ from langdetect import detect
 import numpy as np
 from pathlib import Path
 import argparse
+import sys
+from dataclasses import dataclass, field
+from typing import Any
+
+@dataclass
+class Document:
+    page_content: str = ""
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+# Allow unpickling indexes built with older langchain versions
+import types
+_compat = types.ModuleType("_langchain_compat")
+_compat.Document = Document
+
+for _mod_path in ("langchain.schema", "langchain.schema.document",
+                  "langchain_core.documents", "langchain_core.documents.base"):
+    if _mod_path not in sys.modules:
+        sys.modules[_mod_path] = _compat
 
 def load_model(model_name):
     return SentenceTransformer(model_name)
